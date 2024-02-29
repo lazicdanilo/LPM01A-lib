@@ -25,7 +25,6 @@ For more information about the X-NUCLEO-LPM01A communication protocol please ref
 ```python
 from src.LPM01A import LPM01A
 
-
 lpm = LPM01A("/dev/ttyACM0", 3864000)
 lpm.init_device(mode="ascii", voltage=3300, freq=5000, duration=0)
 lpm.start_capture()
@@ -38,6 +37,7 @@ See [data_acquisition.py](data_acquisition.py) for a complete example.
 
 ```python
 from src.DataAnalysis import DataAnalysis
+
 da = DataAnalysis("example.csv", 10_000, 30_000)
 print(f"Average current consumption {da.calculate_average_current()} Ah")
 da.plot_current_vs_timestamp()
