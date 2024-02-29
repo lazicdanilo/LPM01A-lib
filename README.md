@@ -8,9 +8,19 @@ For more information about the X-NUCLEO-LPM01A communication protocol please ref
 
 ## Prerequisites
 
+### Data Acquisition
+
 - [PySerial](https://pypi.org/project/pyserial/)
 
+### Data Analysis
+
+- [Click](https://pypi.org/project/click/)
+- [Pandas](https://pypi.org/project/pandas/)
+- [Matplotlib](https://pypi.org/project/matplotlib/)
+
 ## Usage
+
+### LPM01A
 
 ```python
 from src.LPM01A import LPM01A
@@ -21,6 +31,19 @@ lpm.init_device(mode="ascii", voltage=3300, freq=5000, duration=0)
 lpm.start_capture()
 lpm.read_and_parse_data()
 ```
+
+See [data_acquisition.py](data_acquisition.py) for a complete example.
+
+### DataAnalysis
+
+```python
+from src.DataAnalysis import DataAnalysis
+da = DataAnalysis("example.csv", 10_000, 30_000)
+print(f"Average current consumption {da.calculate_average_current()} Ah")
+da.plot_current_vs_timestamp()
+```
+
+See [data_analysis.py](data_analysis.py) for a complete example.
 
 ## Limitations
 
