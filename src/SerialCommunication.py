@@ -36,7 +36,11 @@ class SerialCommunication:
         self.ser.write((data + "\n").encode())
 
     def receive_data(self) -> str:
-        """Receives data from the device."""
+        """Receives data from the device.
+
+        Returns:
+            str: The received data from the device.
+        """
         response = self.ser.readline().decode().strip()
         return response
 
@@ -45,6 +49,9 @@ class SerialCommunication:
 
         Args:
             num_bytes (int): The number of bytes to receive.
+
+        Returns:
+            bytes: The received raw data from the device.
         """
         response = self.ser.read(num_bytes)
         return response
