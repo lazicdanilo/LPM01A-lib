@@ -7,6 +7,8 @@ from src.CsvWriter import CsvWriter
 
 
 class LPM01A:
+    PRINT_INFO_EVERY_MS = 3000
+
     def __init__(self, port, baud_rate) -> None:
         """
         Initializes the LPM01A device with the given port and baud rate.
@@ -27,6 +29,8 @@ class LPM01A:
         self.board_timestamp_ms = 0
         self.capture_start_ms = 0
         self.num_of_captured_values = 0
+        self.last_print_timestamp_ms = 0
+        self.board_buffer_usage_percentage = 0
 
     def _a_to_ua(self, a: float) -> float:
         """Converts the current from A to uA.
@@ -46,16 +50,16 @@ class LPM01A:
                 continue
 
             if "TimeStamp:" in response:
-                print(
-                    f"{response}. Num of received values: {self.num_of_captured_values}"
-                )
                 try:
-                    split_response = response.split(",")
-                    match = re.search("TimeStamp: (\d+)s (\d+)ms", split_response[0])
+                    match = re.search(
+                        "TimeStamp: (\d+)s (\d+)ms, buff (\d+)%", response
+                    )
                     if match:
                         self.board_timestamp_ms = (
                             int(match.group(2)) + int(match.group(1)) * 1000
                         )
+                        self.board_buffer_usage_percentage = int(match.group(3))
+
                 except:
                     print(f"Error parsing timestamp: {response}")
                 continue
@@ -70,7 +74,7 @@ class LPM01A:
                 try:
                     current = int(split_response[0])  # Extract the raw current value
                 except ValueError:
-                    # When the TimeStamp is received, 
+                    # When the TimeStamp is received,
                     # the next current values has \x00 in the beginning so I need to strip it
                     current = int(split_response[0][1:])
 
@@ -89,6 +93,19 @@ class LPM01A:
                     f"{current}, {local_timestamp_ms}, {self.board_timestamp_ms}\n"
                 )
                 self.num_of_captured_values += 1
+
+                # Print the info every PRINT_INFO_EVERY_MS
+                if (
+                    local_timestamp_ms - self.last_print_timestamp_ms
+                    > self.PRINT_INFO_EVERY_MS
+                ):
+                    print(
+                        f"Current: {current} uA, Local timestamp: {local_timestamp_ms} ms, Num of received values: {self.num_of_captured_values}"
+                    )
+                    print(
+                        f"Board timestamp: {self.board_timestamp_ms} ms, board usage buffer: {self.board_buffer_usage_percentage}%\n"
+                    )
+                    self.last_print_timestamp_ms = local_timestamp_ms
             except:
                 print(f"Error parsing data: {response}")
 
