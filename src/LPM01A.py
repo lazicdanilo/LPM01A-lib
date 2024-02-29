@@ -27,7 +27,7 @@ class LPM01A:
         self.mode = None
 
         self.board_timestamp_ms = 0
-        self.capture_start_ms = 0
+        self.capture_start_us = 0
         self.num_of_captured_values = 0
         self.last_print_timestamp_ms = 0
         self.board_buffer_usage_percentage = 0
@@ -39,6 +39,22 @@ class LPM01A:
             a (float): The current in A.
         """
         return a * 1_000_000.0
+
+    def _us_to_ms(self, us: float) -> float:
+        """Converts the time from us to ms.
+
+        Args:
+            us (float): The time in us.
+        """
+        return us / 1000.0
+
+    def _s_to_us(self, s: float) -> float:
+        """Converts the time from s to us.
+
+        Args:
+            s (float): The time in s.
+        """
+        return s * 1_000_000.0
 
     def _read_and_parse_ascii(self) -> None:
         """
@@ -88,24 +104,24 @@ class LPM01A:
 
                 current = round(self._a_to_ua(current), 4)
 
-                local_timestamp_ms = int(time() * 1000) - self.capture_start_ms
+                local_timestamp_us = int(self._s_to_us(time())) - self.capture_start_us
                 self.csv_writer.write(
-                    f"{current}, {local_timestamp_ms}, {self.board_timestamp_ms}\n"
+                    f"{current}, {local_timestamp_us}, {self.board_timestamp_ms}\n"
                 )
                 self.num_of_captured_values += 1
 
                 # Print the info every PRINT_INFO_EVERY_MS
                 if (
-                    local_timestamp_ms - self.last_print_timestamp_ms
+                    self._us_to_ms(local_timestamp_us) - self.last_print_timestamp_ms
                     > self.PRINT_INFO_EVERY_MS
                 ):
                     print(
-                        f"Current: {current} uA, Local timestamp: {local_timestamp_ms} ms, Num of received values: {self.num_of_captured_values}"
+                        f"Current: {current} uA, Local timestamp: {local_timestamp_us} us, Num of received values: {self.num_of_captured_values}"
                     )
                     print(
                         f"Board timestamp: {self.board_timestamp_ms} ms, board usage buffer: {self.board_buffer_usage_percentage}%\n"
                     )
-                    self.last_print_timestamp_ms = local_timestamp_ms
+                    self.last_print_timestamp_ms = self._us_to_ms(local_timestamp_us)
             except:
                 print(f"Error parsing data: {response}")
 
@@ -195,7 +211,7 @@ class LPM01A:
         self.serial_comm.close_serial()
 
     def read_and_parse_data(self):
-        self.capture_start_ms = int(time() * 1000)
+        self.capture_start_us = int(self._s_to_us(time()))
         if self.mode == "ascii":
             self._read_and_parse_ascii()
         else:
