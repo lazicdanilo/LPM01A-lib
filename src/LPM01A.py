@@ -34,7 +34,7 @@ class LPM01A:
         Args:
             a (float): The current in A.
         """
-        return a * 1_000_000
+        return a * 1_000_000.0
 
     def _read_and_parse_ascii(self) -> None:
         """
@@ -70,7 +70,9 @@ class LPM01A:
                 try:
                     current = int(split_response[0])  # Extract the raw current value
                 except ValueError:
-                    current = int(split_response[0][2:])
+                    # When the TimeStamp is received, 
+                    # the next current values has \x00 in the beginning so I need to strip it
+                    current = int(split_response[0][1:])
 
                 exponent = int(split_response[1])  # Extract the exponent value
 
@@ -80,7 +82,7 @@ class LPM01A:
                 else:
                     current = current * pow(10, ((-1) * exponent))
 
-                current = round(self._a_to_ua(current))
+                current = round(self._a_to_ua(current), 4)
 
                 local_timestamp_ms = int(time() * 1000) - self.capture_start_ms
                 self.csv_writer.write(
