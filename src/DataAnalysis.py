@@ -83,6 +83,17 @@ class DataAnalysis:
         """
         return len(self.filtered_df)
 
+    def get_time_slice(self) -> float:
+        """Returns the time slice in seconds.
+
+        Returns:
+            float: The time slice in seconds.
+        """
+        return self.uc.us_to_s(
+            self.filtered_df["rx timestamp (us)"].iloc[-1]
+            - self.filtered_df["rx timestamp (us)"].iloc[0]
+        )
+
     def plot_current_vs_timestamp(
         self, x_label: str = None, y_label: str = None, title: str = None
     ) -> None:
@@ -104,5 +115,5 @@ class DataAnalysis:
             plt.ylabel(y_label)
         if title:
             plt.title(title)
-        
+
         plt.show()

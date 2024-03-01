@@ -43,16 +43,16 @@ def main(
     uc = UnitConversions()
 
     if not dont_calculate:
-        window_size = end_timestamp_us - start_timestamp_us
         print(
-            f"Analysing data for period of {uc.us_to_ms(window_size)} ms ({uc.us_to_s(window_size)} s)"
+            f"Selected time window: {da.get_time_slice()} s ({uc.s_to_ms(da.get_time_slice())} ms)"
         )
-        print(f"Number of values in the period: {da.get_number_of_used_values()}")
-        print(f"Depending on the number of values, this may take a while...")
+        print(
+            f"Number of values in selected time window: {da.get_number_of_used_values()}"
+        )
 
         average_current_Ah = da.calculate_average_current()
         print(
-            f"Average current consumption {average_current_Ah} Ah"
+            f"Average current consumption {average_current_Ah} Ah "
             f"({uc.A_to_mA(average_current_Ah)} mAh)"
         )
 
