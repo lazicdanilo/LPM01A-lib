@@ -47,6 +47,9 @@ See [data_analysis.py](data_analysis.py) for a complete example.
 
 ## Limitations
 
+Both the data acquisition and data analysis scripts are limited to Unux-like systems, as the serial port is accessed through the `/dev/ttyACM0` path.
+Both scripts were tested on an Arch Linux and a Raspberry Pi 3B+ running Raspbian.
+
 As this driver can work with ASCII mode only, the acquisition frequency of the LPM01A is limited to maximum of 50k samples / second.
 
 ## License
