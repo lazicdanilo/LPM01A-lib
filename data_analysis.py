@@ -86,8 +86,10 @@ def main(
         print(
             f"Selected time window: {time_window_s} s ({uc.s_to_ms(time_window_s)} ms)\n"
             f"Number of values: {num_values}\n"
-            f"Average current consumption: {average_current_Ah} Ah "
-            f"({uc.A_to_mA(average_current_Ah)} mAh)"
+            f"Average current consumption:\n"
+            f"  - {average_current_Ah} Ah\n"
+            f"  - {uc.A_to_mA(average_current_Ah)} mAh\n"
+            f"  - {uc.A_to_uA(average_current_Ah)} uAh"
         )
 
     if not no_cache_write and cache_data == None and not dont_calculate:
