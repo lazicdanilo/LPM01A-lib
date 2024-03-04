@@ -77,6 +77,17 @@ class UnitConversions:
         """
         return s * 1000.0
 
+    def s_to_h(self, s: float) -> float:
+        """Converts the time from s to h.
+
+        Args:
+            s (float): The time in s.
+
+        Returns:
+            float: The time in h.
+        """
+        return s / 3600.0
+
     def us_to_h(self, us: float) -> float:
         """Converts the time from us to h.
 

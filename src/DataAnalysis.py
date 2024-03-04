@@ -153,6 +153,7 @@ class DataAnalysis:
         """
         tick_start = time()
         mean_value_Ah = 0
+        sum_value_Ah = 0
         percentage_done = 0
         eta = 0
         for i in range(len(self.filtered_df["rx timestamp (us)"])):
@@ -173,7 +174,7 @@ class DataAnalysis:
 
             window_size_h = self.uc.us_to_h(window_size_us)
 
-            mean_value_Ah += mean_value_in_window_A * window_size_h
+            sum_value_Ah += mean_value_in_window_A * window_size_h
 
             # Print percentage every 0.5 percent
             if (
@@ -190,6 +191,7 @@ class DataAnalysis:
                 if percentage_done == 100:
                     print(f"\nTime taken: {time() - tick_start:.2f} s")
 
+        mean_value_Ah = sum_value_Ah / self.uc.s_to_h(self.get_time_slice())
         return mean_value_Ah
 
     def get_number_of_used_values(self) -> int:
