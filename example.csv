@@ -6,10 +6,10 @@
 # This will only be generated if the calculation is done for the
 # whole CSV file (flags -s, --start and -e, --end are not used)
 #
-# Generated on: 03-03-2024_10:42:08
+# Generated on: 04-03-2024_13:07:48
 # Calculation time window: 4.717438 s (4717.437999999999 ms)
 # Number of values: 4720
-# Average current consumption: 7.347662577893055e-06 Ah (0.007347662577893055 mAh)
+# Average current consumption: 0.005607192989163821 Ah (5.607192989163821 mAh)
 ##########################################################################################################
 Current (uA),rx timestamp (us),board timestamps (ms)
 14.06,0,281000
