@@ -49,7 +49,7 @@ See [data_analysis.py](data_analysis.py) for a complete example.
 
 ```bash
 # Calculates average current consumption between 3ms and 3.7ms and plots data
-./data_analysis.py example.csv --s 3_000_000 --e 3_700_000 --p 
+./data_analysis.py example.csv -s 3_000_000 -e 3_700_000 -p 
 ```
 
 ![Usage example](assets/pics/data_analysis_usage_example.gif)
