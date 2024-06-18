@@ -1,3 +1,5 @@
+#!/bin/env python3
+
 import click
 import datetime as dt
 from src.DataAnalysis import DataAnalysis, CacheData

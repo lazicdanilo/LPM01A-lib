@@ -1,3 +1,5 @@
+#!/bin/env python3
+
 from src.LPM01A import LPM01A
 
 try:
