@@ -28,15 +28,9 @@ from src.UnitConversions import UnitConversions
 )
 @click.option(
     "-c",
-    "--no-cache-load",
+    "--no-cache",
     is_flag=True,
-    help="Don't use cached values from the CSV file.",
-)
-@click.option(
-    "-a",
-    "--no-cache-write",
-    is_flag=True,
-    help="Don't write cache data to the CSV file.",
+    help="Don't use cached values from the CSV file nor write cache data to the CSV file.",
 )
 @click.help_option("-h", "--help")
 def main(
@@ -45,8 +39,7 @@ def main(
     csv_file: str,
     plot: bool,
     dont_calculate: bool,
-    no_cache_load: bool,
-    no_cache_write: bool,
+    no_cache: bool,
 ):
     """Calculate average current consumption from a CSV file between start_timestamp_us and end_timestamp_us.
     If -p/--plot flag is used data will be plotted.
@@ -60,7 +53,7 @@ def main(
     """
 
     da = DataAnalysis(
-        csv_file, start_timestamp_us, end_timestamp_us, try_cache=(not no_cache_load)
+        csv_file, start_timestamp_us, end_timestamp_us, try_cache=(not no_cache)
     )
     uc = UnitConversions()
 
@@ -68,11 +61,10 @@ def main(
 
     # We can only read/write cache data if the whole file is used (option -s and -e are not used)
     if start_timestamp_us != 0 or end_timestamp_us != 2**64:
-        no_cache_load = True
-        no_cache_write = True
+        no_cache = True
 
     if not dont_calculate:
-        if not no_cache_load:
+        if not no_cache:
             cache_data = da.get_csv_cache_data()
 
         if cache_data == None:
@@ -94,7 +86,7 @@ def main(
             f"  - {uc.A_to_uA(average_current_Ah)} uAh"
         )
 
-    if not no_cache_write and cache_data == None and not dont_calculate:
+    if not no_cache and cache_data == None and not dont_calculate:
         print("============= Writing cache data =============")
         cd = CacheData()
         cd.date = dt.datetime.now().strftime("%d-%m-%Y")
