@@ -45,6 +45,15 @@ da.plot_current_vs_timestamp()
 
 See [data_analysis.py](data_analysis.py) for a complete example.
 
+### data_analysis.py
+
+```bash
+# Calculates average current consumption between 3ms and 3.7ms and plots the current vs timestamp
+python data_analysis.py example.csv --start-timestamp-us 3_000_000 --end-timestamp-us 3_700_000 --plot 
+```
+
+![Usage example](assets/pics/data_analysis_usage_example.gif)
+
 ## Limitations
 
 Both the data acquisition and data analysis scripts are limited to Unux-like systems, as the serial port is accessed through the `/dev/ttyACM0` path.
